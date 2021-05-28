@@ -8,7 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import {useContext, useState, useEffect} from 'react';
 import {makeStyles} from "@material-ui/core/styles";
 import {DispatchContext, ADD_ITEM} from "../../../context/ContextReducer";
-import {v4 as uuidv4} from "uuid";
+import ApiCall from "../../core/api-call/ApiCall";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,6 +26,7 @@ const AddNewItemModal = () => {
   const dispatchContext = useContext(DispatchContext);
 
   const [open, setOpen] = useState(false);
+  const [touched, setTouched] = useState(false);
   const [productName, setProductName] = useState('');
 
   useEffect(() => {
@@ -41,13 +42,22 @@ const AddNewItemModal = () => {
   };
 
   const addItem = () => {
-    dispatchContext({type: ADD_ITEM, payload: {id: uuidv4(), name: productName}});
+    if (!productName) return;
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({name: productName})
+    };
+    ApiCall('/api/items', options).then(response => dispatchContext({type: ADD_ITEM, payload: response}));
+    setTouched(false);
     setOpen(false);
   };
 
   return (
     <div>
-      <Button className={classes.addItemButton}  variant="outlined" color="primary" onClick={handleClickOpen}>
+      <Button className={classes.addItemButton} variant="outlined" color="primary" onClick={handleClickOpen}>
         Add Item
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" maxWidth='sm' fullWidth>
@@ -61,10 +71,15 @@ const AddNewItemModal = () => {
             margin="dense"
             id="name"
             onInput={event => setProductName(event.target.value)}
+            onBlur={() => setTouched(true)}
             value={productName}
             label="Name"
             type="text"
             fullWidth
+            required
+            error={touched && !productName}
+            variant='outlined'
+            helperText={touched && !productName && 'Field Name is required'}
           />
         </DialogContent>
         <DialogActions>
