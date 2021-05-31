@@ -4,25 +4,15 @@ import {
   ListItem,
   ListItemText
 } from '@material-ui/core';
-import {makeStyles} from "@material-ui/core/styles";
 import CancelIcon from '@material-ui/icons/Cancel';
 import {StateContext, DispatchContext, DELETE_ITEM, SET_ITEMS} from "../../context/ContextReducer";
 import {useContext, useEffect} from "react";
 import AddNewItemModal from "./modals/AddNewItemModal";
 import ApiCall from '../core/api-call/ApiCall';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-    maxWidth: 360,
-    backgroundColor: theme.palette.background.paper,
-  }
-}));
-
 
 const ShoppingList = () => {
 
-  const classes = useStyles();
   const stateContext = useContext(StateContext);
   const dispatchContext = useContext(DispatchContext);
 
