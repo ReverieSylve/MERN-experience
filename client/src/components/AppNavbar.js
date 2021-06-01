@@ -1,7 +1,7 @@
-import {useContext, useState} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import {useState} from 'react';
+import {makeStyles} from '@material-ui/core/styles';
 import {AppBar, Toolbar, Typography} from '@material-ui/core';
-import {StateContext} from "../context/ContextReducer";
+import {useAppState} from '../contexts/AppState';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,14 +15,13 @@ const useStyles = makeStyles((theme) => ({
 const AppNavbar = () => {
   const classes = useStyles();
   const [isMenuOpened, setIsMenuOpened] = useState(false);
-  const stateContext = useContext(StateContext);
-
+  const [state] = useAppState();
   return (
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
           <Typography onClick={() => setIsMenuOpened(!isMenuOpened)} variant="h6" className={classes.title}>
-            Shopping List: {stateContext.items.length} - {String(isMenuOpened)}
+            Shopping List: {state.shoppingItems.items.length} - {String(isMenuOpened)}
           </Typography>
         </Toolbar>
       </AppBar>

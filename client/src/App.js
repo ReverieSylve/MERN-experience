@@ -2,13 +2,20 @@ import './App.css';
 import './components/AppNavbar'
 import AppNavbar from "./components/AppNavbar";
 import ShoppingList from "./components/shopping-list/ShoppingList";
-import ContextReducer from "./context/ContextReducer";
-function App() {
+import {initialState, combineReducers} from './reducers';
+import {AppStateProvider} from './contexts/AppState';
+import ShoppingItemsReducer from './reducers/ShoppingItemsReducer';
+
+const appReducers = combineReducers({
+  shoppingItems: ShoppingItemsReducer,
+})
+
+const App = () => {
   return (
-    <ContextReducer>
+    <AppStateProvider reducer={appReducers} initialState={initialState}>
       <AppNavbar/>
       <ShoppingList/>
-    </ContextReducer>
+    </AppStateProvider>
   );
 }
 

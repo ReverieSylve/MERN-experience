@@ -5,9 +5,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {useContext, useState, useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import {makeStyles} from "@material-ui/core/styles";
-import {DispatchContext, ADD_ITEM} from "../../../context/ContextReducer";
+import {useAppState} from '../../../contexts/AppState';
 import ApiCall from "../../core/api-call/ApiCall";
 
 const useStyles = makeStyles((theme) => ({
@@ -23,7 +23,8 @@ const useStyles = makeStyles((theme) => ({
 
 const AddNewItemModal = () => {
   const classes = useStyles();
-  const dispatchContext = useContext(DispatchContext);
+  const [state, dispatch] = useAppState();
+
 
   const [open, setOpen] = useState(false);
   const [touched, setTouched] = useState(false);
@@ -50,7 +51,7 @@ const AddNewItemModal = () => {
       },
       body: JSON.stringify({name: productName})
     };
-    ApiCall('/api/items', options).then(response => dispatchContext({type: ADD_ITEM, payload: response}));
+    ApiCall('/api/items', options).then(response => dispatch({type: 'ADD_ITEM', payload: response}));
     setTouched(false);
     setOpen(false);
   };

@@ -5,27 +5,24 @@ import {
   ListItemText
 } from '@material-ui/core';
 import CancelIcon from '@material-ui/icons/Cancel';
-import {StateContext, DispatchContext, DELETE_ITEM, SET_ITEMS} from "../../context/ContextReducer";
-import {useContext, useEffect} from "react";
+import {useEffect} from "react";
 import AddNewItemModal from "./modals/AddNewItemModal";
 import ApiCall from '../core/api-call/ApiCall';
+import {useAppState} from '../../contexts/AppState';
 
 
 const ShoppingList = () => {
 
-  const stateContext = useContext(StateContext);
-  const dispatchContext = useContext(DispatchContext);
-
-
+  const [state, dispatch] = useAppState();
   useEffect(() => {
-    ApiCall('/api/items').then(response => dispatchContext({type: SET_ITEMS, payload: response}));
+    ApiCall('/api/items').then(response => dispatch({type: 'SET_ITEMS', payload: response}));
   }, []);
 
   const removeItem = itemId => {
     const options = {
       method: 'DELETE',
     };
-    ApiCall(`/api/items/${itemId}`, options).then(() => dispatchContext({type: DELETE_ITEM, payload: itemId}));
+    ApiCall(`/api/items/${itemId}`, options).then(() => dispatch({type: 'DELETE_ITEM', payload: itemId}));
   };
 
   return (
@@ -34,7 +31,7 @@ const ShoppingList = () => {
       <AddNewItemModal/>
 
       <List aria-label="main mailbox folders">
-        {stateContext.items.map(({name, _id}) => (
+        {state.shoppingItems.items.map(({name, _id}) => (
           <ListItem key={_id} button>
             <ListItemText primary={name}/>
             <CancelIcon color="secondary" onClick={() => removeItem(_id)}/>
