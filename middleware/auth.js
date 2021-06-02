@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const auth = (request, response, next) => {
   const token = request.header('x-auth-token');
 
-  if (!token) response.status(401).json({message: 'No token, authorization denied'});
+  if (!token) return response.status(401).json({message: 'No token, authorization denied'});
 
   try {
     const decoded = jwt.verify(token, config.get('jwtSecret'));

@@ -2,6 +2,17 @@ const initialState = {
   shoppingItems: {
     items: [],
     loading: false
+  },
+  errorState: {
+    message: {},
+    status: null,
+    id: null
+  },
+  authState: {
+    token: localStorage.getItem('token'),
+    isAuthenticated: null,
+    isLoading: false,
+    user: null
   }
 };
 

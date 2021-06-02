@@ -20,4 +20,4 @@ AppStateProvider.propTypes = {
 
 export function useAppState() {
   return useContext(Context)
-};
+}

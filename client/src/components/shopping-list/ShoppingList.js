@@ -5,7 +5,7 @@ import {
   ListItemText
 } from '@material-ui/core';
 import CancelIcon from '@material-ui/icons/Cancel';
-import {useEffect} from "react";
+import {useEffect, useCallback} from "react";
 import AddNewItemModal from "./modals/AddNewItemModal";
 import ApiCall from '../core/api-call/ApiCall';
 import {useAppState} from '../../contexts/AppState';
@@ -14,9 +14,14 @@ import {useAppState} from '../../contexts/AppState';
 const ShoppingList = () => {
 
   const [state, dispatch] = useAppState();
+
+  const fetchItems = useCallback(async () => {
+    ApiCall('/api/items').then(response => dispatch({type: 'SET_ITEMS', payload: response}))
+  }, [dispatch]);
+
   useEffect(() => {
-    ApiCall('/api/items').then(response => dispatch({type: 'SET_ITEMS', payload: response}));
-  }, []);
+    fetchItems();
+  }, [fetchItems]);
 
   const removeItem = itemId => {
     const options = {

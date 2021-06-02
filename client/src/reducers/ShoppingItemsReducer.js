@@ -7,7 +7,6 @@ const ShoppingItemsReducer = (state, action = {}) => {
         shoppingItems: {...state.shoppingItems, items: payload}
       };
     case 'DELETE_ITEM':
-      debugger;
       return {
         ...state,
         shoppingItems: {...state.shoppingItems, items: state.shoppingItems.items.filter(item => item._id !== payload)}
